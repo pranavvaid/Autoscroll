@@ -1,0 +1,48 @@
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(3, 2, 4, 5, 6, 7); //initialize the LCD's pins
+
+const int TIMEDELAY = 500; // delay for scroll
+
+void setup() {
+  // set up the LCD's number of columns and rows:
+  analogWrite(9,255);
+  analogWrite(10,255);
+  analogWrite(11,255);
+  lcd.begin(16, 2); //start the LCD
+  Serial.begin(9600); //Begin a serial connection
+}
+
+void loop() {
+  lcd.autoscroll(); //enable autoscroll
+  printBase(); //Print the base
+  printTime(); //Print the time
+  printSpace(); //Print a space
+  lcd.clear(); //Clear the LCD
+  
+}
+
+void printSpace(){
+  for (int i = 0; i<15; i++){ //Run 15 times
+    lcd.print(" "); // Print a space (15 times)
+    delay(TIMEDELAY); //Delay
+  }
+}
+
+void printTime(){
+  String mytime = String(millis()/1000); //Get the time since the program started in seconds and convert to a string
+  for(int i = 0; i<mytime.length(); i++){ //Run for as many characters there are in the time string
+    lcd.print(mytime[i]); //Print each character in the time
+    delay(TIMEDELAY); //Delay
+  }
+}
+void printBase(){
+  String base = "This is the time: "; //The base string
+  Serial.println("String length: "); //Send the string length to the computer
+  Serial.println(base.length()); // Send the length to the computer
+  lcd.setCursor(16,0); //Set the cursor to 16,0 (1 character to the left of the edge of the LCD on the first row)
+  for(int i = 0; i<base.length(); i++){ //Run for as many characters there are in the base
+    lcd.print(base[i]); //Print each character
+    delay(TIMEDELAY); //Delay
+  }
+}
